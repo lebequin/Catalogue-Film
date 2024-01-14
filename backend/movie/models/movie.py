@@ -5,8 +5,5 @@ class Movie(models.Model):
     title = models.CharField(max_length=256)
     description = models.TextField()
 
-    class Meta:
-        ordering = ('title',)
-        
     def average_grade(self):
         return self.reviews.aggregate(Avg('grade'))['grade__avg']
