@@ -1,11 +1,19 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import MovieList from "@/components/MovieList.vue";
-import MovieDetail from "@/components/MovieDetail.vue";
+import MovieList from "../components/MovieList.vue";
+import MovieDetail from "../components/MovieDetail.vue";
 
 
 const routes = [
-  { path: '/', component: MovieList, name: 'movie-list' },
-  { path: '/movie/:movieId', component: MovieDetail, name: 'movie-detail', props: true },
+  {
+    path: '/',
+    name: 'MovieList',
+    component: MovieList,
+  },
+  {
+    path: '/movies/:id',
+    name: 'MovieDetail',
+    component: MovieDetail,
+  },
 ];
 
 const router = createRouter({

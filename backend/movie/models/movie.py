@@ -7,7 +7,7 @@ class Movie(models.Model):
 
     @property
     def average_grade(self):
-        return self.reviews.aggregate(Avg('grade'))['grade__avg']
+        return round(self.reviews.aggregate(Avg('grade'))['grade__avg'], 2)
     
     class Meta:
         ordering = ('-pk',)

@@ -7,7 +7,7 @@
           <div class="card-body">
             <h5 class="card-title">{{ movie.title }}</h5>
             <p class="card-text">{{ movie.description }}</p>
-            <button class="btn btn-primary" @click="movieDetails(movie.id)">View detail</button>
+            <router-link :to="{ name: 'MovieDetail', params: { id: movie.id }}">View Details</router-link>
           </div>
         </div>
       </div>

@@ -4,7 +4,7 @@ from django.db import models
 class Actor(models.Model):
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
-    movies = models.ManyToManyField('Movie', related_name='actors')
+    movies = models.ManyToManyField('Movie', related_name='actors', blank=True)
 
 
     class Meta:
