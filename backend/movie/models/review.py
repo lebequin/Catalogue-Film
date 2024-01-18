@@ -1,15 +1,10 @@
 from django.db import models
+from movie.constantes import GradeChoices
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 from movie.models import Movie
 
 class Review(models.Model):
-    class GradeChoices(models.IntegerChoices):
-        GRADE_1 = 1, '1'
-        GRADE_2 = 2, '2'
-        GRADE_3 = 3, '3'
-        GRADE_4 = 4, '4'
-        GRADE_5 = 5, '5'
 
     grade = models.IntegerField(
         choices=GradeChoices.choices,
