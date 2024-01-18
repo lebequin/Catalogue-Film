@@ -1,17 +1,20 @@
-FROM node:16
+# Use an official Node runtime as a parent image
+FROM node:latest
 
+# Set the working directory in the container
 WORKDIR /app
 
-COPY package*.json /app/
+# Copy package.json and package-lock.json (or yarn.lock if using Yarn)
+COPY package*.json ./
 
-RUN npm install && npm cache clean --force
+# Install project dependencies
+RUN npm install
 
-ENV PATH ./app/node_modules/.bin/:$PATH
+# Copy the rest of your app's source code from your host to your image filesystem.
+COPY . .
 
-COPY . /app/
-
+# Make port 8080 available to the world outside this container
 EXPOSE 8080
 
-# Run the command to start the Vue.js development server
-#CMD ["npm", "run", "build"]
-
+# Define the command to run your app using CMD which defines your runtime
+CMD ["npm", "run", "serve"]
