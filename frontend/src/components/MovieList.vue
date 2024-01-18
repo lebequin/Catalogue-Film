@@ -2,7 +2,7 @@
   <div>
     <h1>Movie List</h1>
     <div class="row">
-      <div v-for="movie in movies.results" :key="movie.id" class="col-md-4 mb-4">
+      <div v-for="movie in movies" :key="movie.id" class="col-md-4 mb-4">
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">{{ movie.title }}</h5>
@@ -15,15 +15,15 @@
     <nav aria-label="Page navigation">
       <ul class="pagination">
         <li class="page-item">
-          <a v-if="this.previous_page" class="page-link" href="#" aria-label="Previous" @click="changePage(movies.previous_page)">
+          <a class="page-link" :disabled="currentPage <= 1" href="#" aria-label="Previous" @click="fetchMovies(currentPage - 1)">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
         <li class="page-item">
-          <a class="page-link" href="#">{{ this.page }}</a>
+          <a class="page-link" href="#">{{ this.currentPage }}</a>
         </li>
-        <li v-if="this.next_page" class="page-item" :class="{ disabled: page === movies.total_pages }">
-          <a class="page-link" href="#" aria-label="Next" @click="changePage(movies.next_page)">
+        <li>
+          <a class="page-link" href="#" aria-label="Next" :disabled="!nextPage" @click="fetchMovies(currentPage + 1)">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>
@@ -36,50 +36,24 @@
 export default {
   data() {
     return {
-      movies: {
-        results: [],
-        previous_page: null,
-        next_page: null,
-      },
-      page: 1,
+      movies: [],
+      currentPage: 1,
+      nextPage: null,
     };
   },
   mounted() {
-    this.fetchMovies();
-  },
-  beforeRouteUpdate(to, from, next) {
-    // Update movies when the route changes
-    this.page = parseInt(to.params.page) || 1;
-    this.fetchMovies();
-    next();
+    this.fetchMovies(this.currentPage);
   },
   methods: {
-    async fetchMovies(url) {
+    async fetchMovies(page) {
       try {
-        if(!url){
-          url = `http://localhost:8000/api/movies/`
-        } else {
-          console.log(url)
-        }
-
-        const response = await this.$axios.get(url);
-        this.movies.results = response.data.results;
-        this.previous_page = response.data.previous;
-        this.next_page = response.data.next;
-        console.log(this.next_page)
-
+        const response = await this.$axios.get(`http://localhost:8000/api/movies/?page=${page}`);
+        this.movies = response.data.results;
+        this.currentPage = page;
+        this.nextPage = response.data.next;
       } catch (error) {
         console.error('Error fetching movies:', error);
       }
-    },
-    changePage(newPage) {
-      this.page = newPage;
-      this.fetchMovies(newPage);
-    },
-    movieDetails(movieId) {
-      this.$router.push({
-        path: "/movies/" + movieId
-      });
     },
   },
 };
